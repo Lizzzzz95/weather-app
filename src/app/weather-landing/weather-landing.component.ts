@@ -1,20 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherLandingService } from './weather-landing.service';
 
 @Component({
   selector: 'app-weather-landing',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './weather-landing.component.html',
   styleUrl: './weather-landing.component.scss',
 })
 export class WeatherLandingComponent implements OnInit {
+  public weather$!: Observable<WeatherApiMapped>;
+
   constructor(private _weatherLandingService: WeatherLandingService) {}
 
   public ngOnInit(): void {
-    console.log('weather component works');
-    this._weatherLandingService
-      .getForecast(52.52, 13.41)
-      .subscribe((res) => console.log(res));
+    this.weather$ = this._weatherLandingService.getForecast(52.52, 13.41);
   }
 }
