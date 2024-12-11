@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherLandingService } from './weather-landing.service';
+import { WeatherBlockComponent } from './weather-block/weather-block.component';
 
 @Component({
   selector: 'app-weather-landing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WeatherBlockComponent],
   templateUrl: './weather-landing.component.html',
   styleUrl: './weather-landing.component.scss',
 })

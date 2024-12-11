@@ -1,6 +1,8 @@
 <div>Weather Forecast</div>
 @for (w of (weather$ | async)?.weather; track w) {
-<div>
-  Date: {{ w.date | date: 'dd/MM/yyyy' }}, Max Temp: {{ w.maxTemp }}°C, Min Temp: {{ w.minTemp }}°C
-</div>
+<!-- <div>
+  Date: {{ w.date | date : "dd/MM/yyyy" }}, Max Temp: {{ w.maxTemp }}°C, Min
+  Temp: {{ w.minTemp }}°C
+</div> -->
+<app-weather-block [weatherData]="w"></app-weather-block>
 }

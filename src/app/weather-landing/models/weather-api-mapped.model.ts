@@ -1,7 +1,5 @@
+import { WeatherBlock } from './weather-block.model';
+
 export interface WeatherApiMapped {
-  weather: {
-    minTemp: number;
-    maxTemp: number;
-    date: string;
-  }[];
+  weather: WeatherBlock[];
 }
