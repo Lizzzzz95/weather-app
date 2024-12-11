@@ -37,6 +37,11 @@ describe('WeatherLandingComponent', () => {
 
   it('should ngOnInit', () => {
     component.ngOnInit();
-    expect(component).toBeTruthy();
+    expect(component.formGroup.get('latitude')?.value).toEqual(0);
+  });
+
+  it('should submit form', () => {
+    component.onSubmit();
+    // TODO: use spy obj for mock service and test if api has been called for onSubmit
   });
 });

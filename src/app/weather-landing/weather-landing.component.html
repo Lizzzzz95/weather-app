@@ -1,8 +1,9 @@
 <div>Weather Forecast</div>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div>Latitude: <input type="text" formControlName="latitude" /></div>
+  <div>Longitude: <input type="text" formControlName="longitude" /></div>
+  <button type="submit" [disabled]="!formGroup.valid">Display</button>
+</form>
 @for (w of (weather$ | async)?.weather; track w) {
-<!-- <div>
-  Date: {{ w.date | date : "dd/MM/yyyy" }}, Max Temp: {{ w.maxTemp }}°C, Min
-  Temp: {{ w.minTemp }}°C
-</div> -->
 <app-weather-block [weatherData]="w"></app-weather-block>
 }

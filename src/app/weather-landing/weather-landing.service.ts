@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherApiResponse } from './models/weather-api-response.model';
 
@@ -21,9 +21,12 @@ export class WeatherLandingService {
       .set('longitude', longitude)
       .set('daily', 'apparent_temperature_min,apparent_temperature_max')
       .set('forecast_days', 5);
-    return this.http
-      .get<WeatherApiResponse>(this._url, { params })
-      .pipe(map((data: WeatherApiResponse) => this._mapper(data)));
+    return this.http.get<WeatherApiResponse>(this._url, { params }).pipe(
+      map((data: WeatherApiResponse) => this._mapper(data)),
+      catchError((err: HttpErrorResponse) =>
+        throwError(() => new Error('An error occurred.', err.error))
+      )
+    );
   }
 
   private _mapper(response: WeatherApiResponse): WeatherApiMapped {
