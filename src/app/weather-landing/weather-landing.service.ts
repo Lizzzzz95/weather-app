@@ -1,18 +1,15 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherApiResponse } from './models/weather-api-response.model';
+import { openMeteoUrl } from './models/constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WeatherLandingService {
-  private _url: string = 'https://api.open-meteo.com/v1/forecast';
+  private _url: string = openMeteoUrl;
 
   constructor(private _http: HttpClient) {}
 
@@ -26,12 +23,9 @@ export class WeatherLandingService {
       .set('daily', 'apparent_temperature_min,apparent_temperature_max')
       .set('forecast_days', 6);
 
-    return this._http.get<WeatherApiResponse>(this._url, { params }).pipe(
-      map((data: WeatherApiResponse) => this._mapper(data)),
-      catchError((err: HttpErrorResponse) =>
-        throwError(() => new Error('An error occurred.', err.error))
-      )
-    );
+    return this._http
+      .get<WeatherApiResponse>(this._url, { params })
+      .pipe(map((data: WeatherApiResponse) => this._mapper(data)));
   }
 
   private _mapper(response: WeatherApiResponse): WeatherApiMapped {

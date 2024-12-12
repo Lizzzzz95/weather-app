@@ -40,8 +40,17 @@ describe('WeatherLandingComponent', () => {
     expect(component.formGroup.get('latitude')?.value).toEqual(0);
   });
 
-  it('should submit form', () => {
+  it('should submit form if valid', () => {
+    component.formGroup.get('latitude')?.setValue(0);
+    component.formGroup.get('longitude')?.setValue(0);
     component.onSubmit();
-    // TODO: use spy obj for mock service and test if api has been called for onSubmit
+    expect(component.errorMessage).toBeNull();
+  });
+
+  it('should not submit form if invalid', () => {
+    component.formGroup.get('latitude')?.setValue(0);
+    component.formGroup.get('longitude')?.setValue('test');
+    component.onSubmit();
+    expect(component.errorMessage).not.toBeNull();
   });
 });

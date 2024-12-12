@@ -5,12 +5,15 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherLandingService } from './weather-landing.service';
 import { WeatherBlockComponent } from './weather-block/weather-block.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { genericErrMsg } from './models/constants';
 
 @Component({
   selector: 'app-weather-landing',
@@ -27,8 +30,9 @@ import { WeatherBlockComponent } from './weather-block/weather-block.component';
 export class WeatherLandingComponent implements OnInit, OnDestroy {
   public weather: WeatherApiMapped | undefined;
   public formGroup!: FormGroup;
-  public latitudeDisplay!: number;
-  public longitudeDisplay!: number;
+  public latitudeDisplay: number = 0;
+  public longitudeDisplay: number = 0;
+  public errorMessage: string | null = null;
   private _destroy$: Subject<void> = new Subject<void>();
 
   constructor(private _weatherLandingService: WeatherLandingService) {}
@@ -39,7 +43,11 @@ export class WeatherLandingComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    this._apiCall();
+    if (this.formGroup.valid) {
+      this._apiCall();
+    } else {
+      this.errorMessage = genericErrMsg;
+    }
   }
 
   private _apiCall(): void {
@@ -49,26 +57,29 @@ export class WeatherLandingComponent implements OnInit, OnDestroy {
     this._weatherLandingService
       .getForecast(latitudeUpdate, longitudeUpdate)
       .pipe(takeUntil(this._destroy$))
-      .subscribe((res: WeatherApiMapped) => {
-        this.weather = res;
-        this.latitudeDisplay = latitudeUpdate;
-        this.longitudeDisplay = longitudeUpdate;
+      .subscribe({
+        next: (res: WeatherApiMapped) => {
+          this.weather = res;
+          this.latitudeDisplay = latitudeUpdate;
+          this.longitudeDisplay = longitudeUpdate;
+          this.errorMessage = null;
+        },
+        error: (err: HttpErrorResponse) => {
+          this.errorMessage = err.error.reason;
+        },
       });
   }
 
   private _initValues(): void {
-    this.latitudeDisplay = 0;
-    this.longitudeDisplay = 0;
+    const validators: ValidatorFn[] = [
+      Validators.required,
+      Validators.maxLength(15),
+      Validators.pattern(new RegExp(/[^a-zA-Z]/))
+    ];
 
     this.formGroup = new FormGroup({
-      latitude: new FormControl(this.latitudeDisplay, [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-      ]),
-      longitude: new FormControl(this.longitudeDisplay, [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-      ]),
+      latitude: new FormControl(this.latitudeDisplay, validators),
+      longitude: new FormControl(this.longitudeDisplay, validators),
     });
   }
 
