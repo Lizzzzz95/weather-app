@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -9,11 +10,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { WeatherApiMapped } from './models/weather-api-mapped.model';
-import { WeatherLandingService } from './weather-landing.service';
-import { WeatherBlockComponent } from './weather-block/weather-block.component';
-import { HttpErrorResponse } from '@angular/common/http';
 import { genericErrMsg } from './models/constants';
+import { WeatherApiMapped } from './models/weather-api-mapped.model';
+import { WeatherBlockComponent } from './weather-block/weather-block.component';
+import { WeatherLandingService } from './weather-landing.service';
 
 @Component({
   selector: 'app-weather-landing',
@@ -74,7 +74,7 @@ export class WeatherLandingComponent implements OnInit, OnDestroy {
     const validators: ValidatorFn[] = [
       Validators.required,
       Validators.maxLength(15),
-      Validators.pattern(new RegExp(/[^a-zA-Z]/))
+      Validators.pattern(new RegExp(/[^a-zA-Z]/)),
     ];
 
     this.formGroup = new FormGroup({

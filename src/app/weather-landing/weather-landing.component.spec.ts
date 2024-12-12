@@ -1,10 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { WeatherLandingComponent } from './weather-landing.component';
-import { WeatherLandingService } from './weather-landing.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { WeatherLandingComponent } from './weather-landing.component';
+import { WeatherLandingService } from './weather-landing.service';
 
 describe('WeatherLandingComponent', () => {
   let component: WeatherLandingComponent;

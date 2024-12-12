@@ -5,17 +5,49 @@
 .heading {
   font-size: 1.8rem;
   font-weight: bold;
+  padding: 2rem;
+}
+
+.info-container {
+  display: inline-flex;
+  padding: 0.5rem;
 }
 
 .info-heading {
   font-size: 1.1rem;
+  word-wrap: normal;
+  width: 35%;
+  text-align: left;
 }
 
 .weather-block-container {
   display: inline-block;
-  padding: 1rem;
+  padding: 2rem;
+}
+
+.form-container {
+  width: 50%;
+}
+
+.inner-form-container {
+  display: inline-flex;
+  text-align: left;
+}
+
+.err-msg {
+  color: #ff0000;
 }
 
 .err-msg-empty {
   height: 1.15rem;
+}
+
+.go-btn {
+  margin-left: 1rem;
+  padding: 0 1.7rem;
+  height: 100%;
+  font-size: 1.3rem;
+  color: #ffffff;
+  background-color: #101081;
+  border-radius: 10%;
 }

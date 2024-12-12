@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { openMeteoUrl } from './models/constants';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherApiResponse } from './models/weather-api-response.model';
-import { openMeteoUrl } from './models/constants';
 
 @Injectable({
   providedIn: 'root',

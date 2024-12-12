@@ -1,10 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-
-import { WeatherLandingService } from './weather-landing.service';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { WeatherApiResponse } from './models/weather-api-response.model';
+import { WeatherLandingService } from './weather-landing.service';
 
 describe('WeatherLandingService', () => {
   let httpClientSpy: jasmine.SpyObj<HttpClient>;

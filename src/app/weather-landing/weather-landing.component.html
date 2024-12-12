@@ -4,20 +4,36 @@
       Weather Forecast for {{ latitudeDisplay }} Latitude and
       {{ longitudeDisplay }} Longitude for the next 5 days
     </div>
-    <div class="info-heading">
-      Please enter a valid latitude (-90.000000 to 90.000000) and longitude
-      (-180.000000 to 180.000000)
+
+    <div class="info-container">
+      <div class="form-container">
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+          <div class="inner-form-container">
+            <div>
+              <div>
+                Latitude: <input type="text" formControlName="latitude" />
+              </div>
+              <div>
+                Longitude: <input type="text" formControlName="longitude" />
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="go-btn">Go</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="info-heading">
+        Please enter a valid latitude (-90.000000 to 90.000000) and longitude
+        (-180.000000 to 180.000000)
+      </div>
     </div>
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-      <div>Latitude: <input type="text" formControlName="latitude" /></div>
-      <div>Longitude: <input type="text" formControlName="longitude" /></div>
-      <button type="submit">Go</button>
-      @if (errorMessage) {
-      <div>{{ errorMessage }}</div>
-      } @else {
-      <div class="err-msg-empty"></div>
-      }
-    </form>
+    @if (errorMessage) {
+    <div class="err-msg">{{ errorMessage }}</div>
+    } @else {
+    <div class="err-msg-empty"></div>
+    }
   </div>
 
   @for (w of weather?.weather; track w) {
