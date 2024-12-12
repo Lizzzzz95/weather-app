@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
 import { WeatherLandingService } from './weather-landing.service';
 import { WeatherBlockComponent } from './weather-block/weather-block.component';
@@ -24,24 +24,17 @@ import { WeatherBlockComponent } from './weather-block/weather-block.component';
   templateUrl: './weather-landing.component.html',
   styleUrl: './weather-landing.component.scss',
 })
-export class WeatherLandingComponent implements OnInit {
-  public weather$!: Observable<WeatherApiMapped>;
+export class WeatherLandingComponent implements OnInit, OnDestroy {
+  public weather!: WeatherApiMapped;
   public formGroup!: FormGroup;
+  public latitudeDisplay!: number;
+  public longitudeDisplay!: number;
+  private _destroy$: Subject<void> = new Subject<void>();
 
   constructor(private _weatherLandingService: WeatherLandingService) {}
 
   public ngOnInit(): void {
-    this.formGroup = new FormGroup({
-      latitude: new FormControl(0, [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-      ]),
-      longitude: new FormControl(0, [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-      ]),
-    });
-
+    this._initValues();
     this._apiCall();
   }
 
@@ -50,9 +43,37 @@ export class WeatherLandingComponent implements OnInit {
   }
 
   private _apiCall(): void {
-    this.weather$ = this._weatherLandingService.getForecast(
-      this.formGroup.get('latitude')?.value,
-      this.formGroup.get('longitude')?.value
-    );
+    let latitudeUpdate: number = this.formGroup.get('latitude')?.value;
+    let longitudeUpdate: number = this.formGroup.get('longitude')?.value;
+
+    this._weatherLandingService
+      .getForecast(latitudeUpdate, longitudeUpdate)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((res: WeatherApiMapped) => {
+        this.weather = res;
+        this.latitudeDisplay = latitudeUpdate;
+        this.longitudeDisplay = longitudeUpdate;
+      });
+  }
+
+  private _initValues(): void {
+    this.latitudeDisplay = 0;
+    this.longitudeDisplay = 0;
+
+    this.formGroup = new FormGroup({
+      latitude: new FormControl(this.latitudeDisplay, [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+      ]),
+      longitude: new FormControl(this.longitudeDisplay, [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+      ]),
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.unsubscribe();
   }
 }

@@ -1,9 +1,13 @@
-<div>Weather Forecast</div>
+<div>
+  Weather Forecast for {{ latitudeDisplay }} Latitude and
+  {{ longitudeDisplay }} Longitude
+</div>
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div>Latitude: <input type="text" formControlName="latitude" /></div>
   <div>Longitude: <input type="text" formControlName="longitude" /></div>
   <button type="submit" [disabled]="!formGroup.valid">Display</button>
 </form>
-@for (w of (weather$ | async)?.weather; track w) {
+
+@for (w of weather.weather; track w) {
 <app-weather-block [weatherData]="w"></app-weather-block>
 }

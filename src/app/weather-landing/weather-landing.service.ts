@@ -21,6 +21,7 @@ export class WeatherLandingService {
       .set('longitude', longitude)
       .set('daily', 'apparent_temperature_min,apparent_temperature_max')
       .set('forecast_days', 5);
+      
     return this.http.get<WeatherApiResponse>(this._url, { params }).pipe(
       map((data: WeatherApiResponse) => this._mapper(data)),
       catchError((err: HttpErrorResponse) =>
