@@ -19,4 +19,22 @@ describe('WeatherBlockComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display sunny weather icon when max temp is equal to or more than 25', () => {
+    component.weatherData.maxTemp = 26;
+    component.ngOnInit();
+    expect(component.iconSrc).toEqual('assets/images/day.svg');
+  });
+
+  it('should display cloudy weather icon when max temp is equal to or more than 1', () => {
+    component.weatherData.maxTemp = 3;
+    component.ngOnInit();
+    expect(component.iconSrc).toEqual('assets/images/cloudy-day-3.svg');
+  });
+
+  it('should display snowy weather icon when max temp is less than 1', () => {
+    component.weatherData.maxTemp = -3;
+    component.ngOnInit();
+    expect(component.iconSrc).toEqual('assets/images/snowy-6.svg');
+  });
 });

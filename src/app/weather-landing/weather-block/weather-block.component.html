@@ -1,5 +1,6 @@
 <div>
   <div>{{ weatherData.date | date : "dd/MM/yyyy" }}</div>
+  <img [src]="iconSrc" alt="" class="weather-icon" />
   <div>Max Temp: {{ weatherData.maxTemp }}°C</div>
   <div>Min Temp: {{ weatherData.minTemp }}°C</div>
 </div>
