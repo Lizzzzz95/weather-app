@@ -1,4 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { WeatherApiMapped } from './models/weather-api-mapped.model';
@@ -10,7 +14,7 @@ import { WeatherApiResponse } from './models/weather-api-response.model';
 export class WeatherLandingService {
   private _url: string = 'https://api.open-meteo.com/v1/forecast';
 
-  constructor(private http: HttpClient) {}
+  constructor(private _http: HttpClient) {}
 
   public getForecast(
     latitude: number,
@@ -20,9 +24,9 @@ export class WeatherLandingService {
       .set('latitude', latitude)
       .set('longitude', longitude)
       .set('daily', 'apparent_temperature_min,apparent_temperature_max')
-      .set('forecast_days', 5);
-      
-    return this.http.get<WeatherApiResponse>(this._url, { params }).pipe(
+      .set('forecast_days', 6);
+
+    return this._http.get<WeatherApiResponse>(this._url, { params }).pipe(
       map((data: WeatherApiResponse) => this._mapper(data)),
       catchError((err: HttpErrorResponse) =>
         throwError(() => new Error('An error occurred.', err.error))
@@ -34,7 +38,7 @@ export class WeatherLandingService {
     let newRes: WeatherApiMapped = {
       weather: [],
     };
-    for (let i = 0; i < response.daily.apparent_temperature_max.length; i++) {
+    for (let i = 1; i < response.daily.apparent_temperature_max.length; i++) {
       newRes.weather.push({
         minTemp: response.daily.apparent_temperature_min[i],
         maxTemp: response.daily.apparent_temperature_max[i],

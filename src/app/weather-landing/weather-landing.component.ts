@@ -25,7 +25,7 @@ import { WeatherBlockComponent } from './weather-block/weather-block.component';
   styleUrl: './weather-landing.component.scss',
 })
 export class WeatherLandingComponent implements OnInit, OnDestroy {
-  public weather!: WeatherApiMapped;
+  public weather: WeatherApiMapped | undefined;
   public formGroup!: FormGroup;
   public latitudeDisplay!: number;
   public longitudeDisplay!: number;

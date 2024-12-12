@@ -1,13 +1,19 @@
-<div>
-  Weather Forecast for {{ latitudeDisplay }} Latitude and
-  {{ longitudeDisplay }} Longitude
-</div>
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div>Latitude: <input type="text" formControlName="latitude" /></div>
-  <div>Longitude: <input type="text" formControlName="longitude" /></div>
-  <button type="submit" [disabled]="!formGroup.valid">Display</button>
-</form>
+<div class="container">
+  <div class="form-block">
+    <div>
+      Weather Forecast for {{ latitudeDisplay }} Latitude and
+      {{ longitudeDisplay }} Longitude
+    </div>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <div>Latitude: <input type="text" formControlName="latitude" /></div>
+      <div>Longitude: <input type="text" formControlName="longitude" /></div>
+      <button type="submit" [disabled]="!formGroup.valid">Display</button>
+    </form>
+  </div>
 
-@for (w of weather.weather; track w) {
-<app-weather-block [weatherData]="w"></app-weather-block>
-}
+  @for (w of weather?.weather; track w) {
+  <div class="weather-block-container">
+    <app-weather-block [weatherData]="w"></app-weather-block>
+  </div>
+  }
+</div>
